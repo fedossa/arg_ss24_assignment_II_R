@@ -1,0 +1,166 @@
+---
+title: |
+  | P/B Ratios And Future Residual Income: 
+  | Accounting Reading Group - Assignment II \vspace{1cm}
+authors:
+  - name: Ulf Brüggemann
+    orcid: 0000-0002-9793-6600
+    email: u.bruggemann@hu-berlin.de
+  - name: Fikir Worku Edossa
+    orcid: 0009-0008-3607-4753
+    email: fikir.worku.edossa@hu-berlin.de
+institute: "TRR 266 Accounting for Transparency"
+date: today
+fontsize: "9pt"
+pdf-engine: xelatex # pdflatex creates rastered fonts
+bibliography: references.bib
+biblio-style: apsr
+format: 
+  beamer:
+    slide-level: 3
+    number-sections: true
+    toc: false
+header-includes:
+- \usepackage{booktabs} 
+- \usepackage{threeparttable}
+- \usepackage{graphicx}
+- \usepackage{adjustbox} # To adjust the table size
+- \input{beamer_theme_trr266.sty}
+---
+
+
+```{r}
+#| echo: false
+#| output: false
+
+library(dplyr)
+library(kableExtra)
+
+load("../output/results.rda")
+
+
+custom_format <- function(x) {
+  if (is.na(x)) {
+    return("")
+  }
+  formatted <- sprintf("%.3f", x)
+  sub("^0", "", formatted)
+}
+
+```
+
+\pagebreak
+
+# Introduction
+
+The following short presentation illustrates how to use open science tools in empirical accounting research.
+
+- A replication of a table by @P_2013.
+
+- Original based on data for the period 1965 to 1995
+
+- Replication uses data for the period 1996 to 2015.
+
+- Replication follows the research design by @P_2013 as much as possible with the data at hand.
+
+
+# Original Table
+
+- The original table by @P_2013 relates current P/B ratios to current and future residual income.
+
+```{r}
+#| echo: false
+#| output: asis
+
+penman_table <- penman_table %>%
+  mutate(across(where(is.numeric), ~ sapply(.x, custom_format)))
+
+kable(
+  penman_table,
+  "latex",
+  booktabs = TRUE,
+  linesep = "",
+  caption = "Original table Penman 2013 - P/B Ratios And Future Residual Income"
+) %>%
+  kable_styling(latex_options = c("hold_position", "scale_down"), font_size = 5) %>%
+  row_spec(0, bold = TRUE)
+```
+
+# Replicated Table
+
+```{r}
+#| echo: false
+#| output: asis
+
+replication_results <- replication_results %>%
+  mutate(across(where(is.numeric), ~ sapply(.x, custom_format)))
+
+kable(
+  replication_results,
+  "latex",
+  booktabs = TRUE,
+  linesep = "",
+  caption = "Replicated table - P/B Ratios And Future Residual Income"
+) %>%
+  kable_styling(latex_options = c("hold_position", "scale_down"), font_size = 6) %>%
+  row_spec(0, bold = TRUE)
+```
+
+
+
+# Data
+
+Two files that comprise data from Worldscope. 
+
+- The first file focuses on static information at the company level (items: ISIN, company name and country where the company is domiciled)
+
+- The second file contains panel data at the company-year level (items: ISIN, year, market value of equity, book value of equity and net income).
+
+
+# Research Design Choices
+
+
+Following @P_2013, we focus our analysis on companies that are domiciled in the United States. 
+
+In addition, we impose the following requirements:
+
+- We require both the market value of equity (i.e., the numerator of the P/B ratio) and the book value of equity (i.e., the denominator of the P/B ratio) to be positive because non-positive P/B ratios are not economically meaningful. 
+
+- We focus the analysis on the period 1996 to 2015 (as required in the task sheet).
+
+- In computing the residual income, we assume a constant cost of equity of 10% (for simplicity).
+Other than that, we follow @P_2013 by 
+
+- computing the residual income for the current year (year 0) and the subsequent six years (year 1 to 6),
+
+- assigning each company-year to one of 20 groups based on the P/B ratio (e.g., the first group includes company-years with the highest 5% of P/B ratios, while the bottom group includes those with the lowest 5%),
+
+- computing and tabulating median statistics on the P/B ratio and current as well as future residual income for each P/B group.
+
+
+# Results
+
+The replicated table shows some 
+
+- Similarities with the original table by @P_2013 in that median residual income for years 1 and 2 (a) is highest for the group of company-years with the highest P/B ratios and (b) decreases monotonically by P/B group.
+
+- These findings are in line with valuation theory that predicts higher P/B ratios for companies that are expected to generate higher future residual income.
+
+- However, the patterns are less clear for years 3 to 6 in the replicated table (in particular for the group with the highest P/B ratios), which stands in contrast to @P_2013.
+
+# Conclusion
+
+- A replication of a table that relates current P/B ratios to current and future residual income.
+
+- The original table by @P_2013 uses data for the period 1965 to 1995. In contrast, the replication focuses on the period 1996 to 2015.
+
+- The replication yields mixed results.
+
+- While the relation between current P/B ratios and residual income in the near future is similar to that presented in the original table, residual income patterns in the more distant future cannot be replicated. 
+
+
+# References {-}
+\setlength{\parindent}{-0.2in}
+\setlength{\leftskip}{0.2in}
+\setlength{\parskip}{8pt}
+\noindent
